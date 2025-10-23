@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import { Client } from 'src/buildClient';
+import { asyncPagedIterator } from '../src';
 import { MessageSchema } from '../src/contract/schemas/communications/messages';
 import { RecordingEventListResponseSchema } from '../src/contract/schemas/events';
 import {
@@ -30,6 +31,16 @@ describe('Basecamp core resources (live)', () => {
     });
     expect(projectsListResponse.status).toBe(200);
     const projects = ProjectListResponseSchema.parse(projectsListResponse.body);
+
+    const paginatedNames = [];
+    for await (const project of asyncPagedIterator({
+      fetchPage: client.projects.list,
+      request: { query: {} },
+    })) {
+      paginatedNames.push(project.name);
+    }
+
+    expect(paginatedNames.length).toBeGreaterThan(0);
 
     const projectId = projects[0]?.id ?? bucketId;
 

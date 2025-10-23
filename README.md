@@ -27,6 +27,19 @@ const projects = await client.projects.list({ query: {} });
 console.log(projects.body);
 ```
 
+### Iterate through paginated endpoints
+
+```ts
+for await (const project of asyncPagedIterator({
+  fetchPage: client.projects.list,
+  request: { query: {} },
+})) {
+  console.log(project.name);
+}
+```
+
+`asyncPagedIterator` follows the `Link` response headers emitted by Basecamp collection routes, automatically fetching `page=2`, `page=3`, and beyond until the API signals the final page. The helper yields each item returned by the underlying endpoint or lets you define a custom `extractItems` function for non-array responses.
+
 ### Refresh OAuth tokens
 
 ```ts
