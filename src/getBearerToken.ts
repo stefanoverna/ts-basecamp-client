@@ -2,7 +2,7 @@ type GetBearerTokenOptions = {
   clientId: string;
   clientSecret: string;
   refreshToken: string;
-  userAgent: string;
+  userAgent?: string;
 };
 
 export async function getBearerToken({
@@ -15,7 +15,7 @@ export async function getBearerToken({
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'User-Agent': userAgent,
+      ...(userAgent ? { 'User-Agent': userAgent } : {}),
     },
     body: JSON.stringify({
       type: 'refresh',

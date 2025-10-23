@@ -74,7 +74,7 @@ export const contract = c.router(
     strictStatusCodes: true,
     baseHeaders: z.object({
       Authorization: z.string().min(1),
-      'User-Agent': z.string().min(1),
+      'User-Agent': z.string().min(1).optional(),
       Accept: z.literal('application/json').optional(),
     }),
   },

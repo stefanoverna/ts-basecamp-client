@@ -2,7 +2,7 @@ import { initClient as tsRestInitClient } from '@ts-rest/core';
 import { contract } from './contract';
 import { fetcher } from './fetcher';
 
-type InitClientOptions = { bearerToken: string; accountId: string; userAgent: string };
+type InitClientOptions = { bearerToken: string; accountId: string; userAgent?: string };
 
 export function buildClient(options: InitClientOptions) {
   return tsRestInitClient(contract, {
