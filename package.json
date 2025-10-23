@@ -1,29 +1,45 @@
 {
   "name": "basecamp-client",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "directories": {
     "doc": "docs"
   },
   "scripts": {
+    "build": "tsup",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "contract:check": "tsc --noEmit",
     "format": "biome format --write .",
     "lint": "biome lint .",
-    "check": "biome check ."
+    "check": "biome check .",
+    "prepublishOnly": "npm run build"
   },
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "author": "Stefano Verna <s.verna@datocms.com>",
+  "license": "MIT",
+  "description": "Type-safe Basecamp API client.",
   "dependencies": {
     "@ts-rest/core": "^3.52.1",
-    "dotenv": "^17.2.3",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.7",
     "@types/node": "^22",
+    "dotenv": "^17.2.3",
+    "np": "^10.2.0",
+    "tsup": "^8.5.0",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
     "vitest": "^4.0.1"

@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
-import { Client } from 'lib/basecamp/buildClient';
+import { Client } from 'src/buildClient';
 import {
   CampfireLineListResponseSchema,
   CampfireLineSchema,
@@ -25,8 +25,8 @@ import {
   MessageSchema,
   MessageTypeSchema,
   MessageTypesResponseSchema,
-} from '../contracts/basecamp/schemas/communications';
-import { ProjectSchema } from '../contracts/basecamp/schemas/projects';
+} from '../src/contract/schemas/communications';
+import { ProjectSchema } from '../src/contract/schemas/projects';
 import { buildConfiguredClient, requireEnv } from './utils';
 
 let client: Client;

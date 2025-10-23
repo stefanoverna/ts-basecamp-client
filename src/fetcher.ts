@@ -39,7 +39,7 @@ const computeBackoffDelay = (attempt: number, retryAfterMs?: number) => {
   return Math.max(computed, retryAfterMs);
 };
 
-export const basecampApiFetcher = async (args: ApiFetcherArgs) => {
+export async function fetcher(args: ApiFetcherArgs) {
   const url = new URL(args.path);
   if (!url.pathname.endsWith('.json')) {
     url.pathname = `${url.pathname}.json`;
@@ -71,4 +71,4 @@ export const basecampApiFetcher = async (args: ApiFetcherArgs) => {
 
   // Exhausting the loop should already return; throw defensively to satisfy TypeScript.
   throw new Error('Exceeded retry attempts for Basecamp API request.');
-};
+}

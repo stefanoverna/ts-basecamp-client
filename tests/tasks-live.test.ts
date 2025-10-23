@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { Client } from 'lib/basecamp/buildClient';
-import { ProjectSchema } from '../contracts/basecamp/schemas/projects';
+import { Client } from 'src/buildClient';
+import { ProjectSchema } from '../src/contract/schemas/projects';
 import {
   TodoCollectionResponseSchema,
   TodoListGroupsResponseSchema,
@@ -10,7 +10,7 @@ import {
   TodoSchema,
   TodoSetSchema,
   TodoTopLevelListSchema,
-} from '../contracts/basecamp/schemas/tasks';
+} from '../src/contract/schemas/tasks';
 import { buildConfiguredClient, requireEnv } from './utils';
 
 let client: Client;
@@ -40,6 +40,7 @@ describe('Basecamp todos (live)', () => {
         bucketId,
         todosetId: todoSetId,
       },
+      query: {},
     });
 
     expect(listResponse.status).toBe(200);
@@ -80,6 +81,7 @@ describe('Basecamp todos (live)', () => {
           bucketId,
           todolistId,
         },
+        query: {},
       });
 
       expect(listGroupsResponse.status).toBe(200);
@@ -116,6 +118,7 @@ describe('Basecamp todos (live)', () => {
           bucketId,
           todolistId,
         },
+        query: {},
       });
 
       expect(todosListResponse.status).toBe(200);

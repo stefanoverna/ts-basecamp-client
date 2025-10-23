@@ -1,4 +1,4 @@
-export type GetBearerTokenOptions = {
+type GetBearerTokenOptions = {
   clientId: string;
   clientSecret: string;
   refreshToken: string;

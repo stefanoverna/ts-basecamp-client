@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { Client } from 'lib/basecamp/buildClient';
+import { Client } from 'src/buildClient';
 import {
   QuestionListResponseSchema,
   QuestionnaireSchema,
@@ -8,7 +8,7 @@ import {
   ScheduleEntryListResponseSchema,
   ScheduleEntrySchema,
   ScheduleSchema,
-} from '../contracts/basecamp/schemas/scheduling';
+} from '../src/contract/schemas/scheduling';
 import { buildConfiguredClient, requireEnv } from './utils';
 
 let client: Client;

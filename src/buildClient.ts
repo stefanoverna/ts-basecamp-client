@@ -1,11 +1,11 @@
 import { initClient as tsRestInitClient } from '@ts-rest/core';
-import { basecampContract } from '../../contracts/basecamp';
-import { basecampApiFetcher } from './fetcher';
+import { contract } from './contract';
+import { fetcher } from './fetcher';
 
 type InitClientOptions = { bearerToken: string; accountId: string; userAgent: string };
 
 export function buildClient(options: InitClientOptions) {
-  return tsRestInitClient(basecampContract, {
+  return tsRestInitClient(contract, {
     baseUrl: `https://3.basecampapi.com/${options.accountId}`,
     baseHeaders: {
       Authorization: `Bearer ${options.bearerToken}`,
@@ -14,7 +14,7 @@ export function buildClient(options: InitClientOptions) {
       'Content-Type': 'application/json',
     },
     throwOnUnknownStatus: true,
-    api: basecampApiFetcher,
+    api: fetcher,
   });
 }
 

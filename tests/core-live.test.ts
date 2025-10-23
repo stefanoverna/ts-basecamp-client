@@ -1,15 +1,15 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { Client } from 'lib/basecamp/buildClient';
-import { MessageSchema } from '../contracts/basecamp/schemas/communications/messages';
-import { RecordingEventListResponseSchema } from '../contracts/basecamp/schemas/events';
+import { Client } from 'src/buildClient';
+import { MessageSchema } from '../src/contract/schemas/communications/messages';
+import { RecordingEventListResponseSchema } from '../src/contract/schemas/events';
 import {
   PeopleListResponseSchema,
   PersonSchema,
   ProjectPeopleAccessResponseSchema,
-} from '../contracts/basecamp/schemas/people';
-import { ProjectListResponseSchema, ProjectSchema } from '../contracts/basecamp/schemas/projects';
-import { RecordingListResponseSchema } from '../contracts/basecamp/schemas/recordings';
+} from '../src/contract/schemas/people';
+import { ProjectListResponseSchema, ProjectSchema } from '../src/contract/schemas/projects';
+import { RecordingListResponseSchema } from '../src/contract/schemas/recordings';
 import { buildConfiguredClient, requireEnv } from './utils';
 
 let client: Client;
@@ -25,7 +25,9 @@ beforeAll(async () => {
 
 describe('Basecamp core resources (live)', () => {
   it('lists and fetches projects', async () => {
-    const projectsListResponse = await client.projects.list({});
+    const projectsListResponse = await client.projects.list({
+      query: {},
+    });
     expect(projectsListResponse.status).toBe(200);
     const projects = ProjectListResponseSchema.parse(projectsListResponse.body);
 
@@ -41,7 +43,9 @@ describe('Basecamp core resources (live)', () => {
   }, 20000);
 
   it('manages people access flows', async () => {
-    const peopleListResponse = await client.people.list({});
+    const peopleListResponse = await client.people.list({
+      query: {},
+    });
     expect(peopleListResponse.status).toBe(200);
     const people = PeopleListResponseSchema.parse(peopleListResponse.body);
     expect(people.length).toBeGreaterThan(0);
@@ -130,6 +134,7 @@ describe('Basecamp core resources (live)', () => {
           bucketId,
           recordingId: messageId,
         },
+        query: {},
       });
       expect(eventsResponse.status).toBe(200);
       const events = RecordingEventListResponseSchema.parse(eventsResponse.body);

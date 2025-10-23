@@ -1,5 +1,5 @@
-import { buildClient } from '../lib/basecamp/buildClient';
-import { getBearerToken } from '../lib/basecamp/getBearerToken';
+import { buildClient } from '../src/buildClient';
+import { getBearerToken } from '../src/getBearerToken';
 
 export function requireEnv(key: string): string {
   const value = process.env[key];

@@ -1,13 +1,13 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { Client } from 'lib/basecamp/buildClient';
+import { Client } from 'src/buildClient';
 import {
   AttachmentResponseSchema,
   DocumentSchema,
   UploadSchema,
   VaultSchema,
-} from '../contracts/basecamp/schemas/documents';
-import { ProjectSchema } from '../contracts/basecamp/schemas/projects';
+} from '../src/contract/schemas/documents';
+import { ProjectSchema } from '../src/contract/schemas/projects';
 import { buildConfiguredClient, requireEnv } from './utils';
 
 let client: Client;

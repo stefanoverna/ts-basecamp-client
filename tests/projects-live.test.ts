@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { Client } from 'lib/basecamp/buildClient';
-import { ProjectListResponseSchema, ProjectSchema } from '../contracts/basecamp/schemas/projects';
+import { Client } from 'src/buildClient';
+import { ProjectListResponseSchema, ProjectSchema } from '../src/contract/schemas/projects';
 import { buildConfiguredClient, requireEnv } from './utils';
 
 let client: Client;
@@ -14,7 +14,9 @@ beforeAll(async () => {
 
 describe('Basecamp projects (live)', () => {
   it('lists, creates, updates, and trashes a project', async () => {
-    const listResponse = await client.projects.list({});
+    const listResponse = await client.projects.list({
+      query: {},
+    });
 
     expect(listResponse.status).toBe(200);
     ProjectListResponseSchema.parse(listResponse.body);

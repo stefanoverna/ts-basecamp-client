@@ -38,7 +38,7 @@ import {
   todosRouter,
 } from './resources/tasks';
 
-export const basecampContract = c.router(
+export const contract = c.router(
   {
     projects: projectsRouter,
     people: peopleRouter,
@@ -80,36 +80,4 @@ export const basecampContract = c.router(
   },
 );
 
-export type BasecampContract = typeof basecampContract;
-
-export {
-  attachmentsRouter,
-  campfiresRouter,
-  clientApprovalsRouter,
-  clientCorrespondencesRouter,
-  clientRepliesRouter,
-  clientVisibilityRouter,
-  commentsRouter,
-  documentsRouter,
-  eventsRouter,
-  forwardsRouter,
-  inboxRepliesRouter,
-  inboxesRouter,
-  lineupMarkersRouter,
-  messageBoardsRouter,
-  messageTypesRouter,
-  messagesRouter,
-  peopleRouter,
-  projectsRouter,
-  questionnairesRouter,
-  questionsRouter,
-  recordingsRouter,
-  scheduleEntriesRouter,
-  schedulesRouter,
-  todoListGroupsRouter,
-  todoListsRouter,
-  todoSetsRouter,
-  todosRouter,
-  uploadsRouter,
-  vaultsRouter,
-};
+export type Contract = typeof contract;
