@@ -284,30 +284,17 @@ describe('Basecamp communications (live)', () => {
   it('handles campfire line flows', async () => {
     const campfiresListResponse = await client.campfires.list({});
     expect(campfiresListResponse.status).toBe(200);
-    const campfires = CampfireListResponseSchema.parse(campfiresListResponse.body);
+    CampfireListResponseSchema.parse(campfiresListResponse.body);
 
-    if (campfires.length === 0) {
-      console.warn('Skipping Campfire checks: no Campfires available for this account.');
+    if (!campfireId) {
+      console.warn('Skipping Campfire checks: the test project does not have a Campfire.');
       return;
     }
-
-    const campfireUnderTest =
-      (campfireId !== undefined && campfires.find((campfire) => campfire.id === campfireId)) ??
-      campfires.find((campfire) => campfire.bucket.id === bucketId);
-
-    if (!campfireUnderTest) {
-      console.warn(
-        'Skipping Campfire checks: none of the available Campfires belong to the test project.',
-      );
-      return;
-    }
-
-    const targetCampfireId = campfireUnderTest.id;
 
     const campfireGetResponse = await client.campfires.get({
       params: {
         bucketId,
-        campfireId: targetCampfireId,
+        campfireId,
       },
     });
     expect(campfireGetResponse.status).toBe(200);
@@ -316,7 +303,7 @@ describe('Basecamp communications (live)', () => {
     const campfireLinesResponse = await client.campfires.listLines({
       params: {
         bucketId,
-        campfireId: targetCampfireId,
+        campfireId,
       },
     });
     expect(campfireLinesResponse.status).toBe(200);
@@ -328,7 +315,7 @@ describe('Basecamp communications (live)', () => {
       const campfireLineCreateResponse = await client.campfires.createLine({
         params: {
           bucketId,
-          campfireId: targetCampfireId,
+          campfireId,
         },
         body: {
           content: lineContent,
@@ -342,7 +329,7 @@ describe('Basecamp communications (live)', () => {
       const campfireLineGetResponse = await client.campfires.getLine({
         params: {
           bucketId,
-          campfireId: targetCampfireId,
+          campfireId,
           lineId: createdLine.id,
         },
       });
@@ -353,7 +340,7 @@ describe('Basecamp communications (live)', () => {
         const campfireLineDeleteResponse = await client.campfires.deleteLine({
           params: {
             bucketId,
-            campfireId: targetCampfireId,
+            campfireId,
             lineId: createdLineId,
           },
         });
@@ -589,10 +576,11 @@ async function resolveProjectResources(client: Client, bucket: number): Promise<
 
   const project = ProjectSchema.parse(response.body);
   const dock = Array.isArray(project.dock) ? project.dock : [];
+
   const messageBoard = dock.find(
     (entry) => entry.name === 'message_board' && entry.enabled !== false,
   );
-  const campfire = dock.find((entry) => entry.name === 'campfire' && entry.enabled !== false);
+  const campfire = dock.find((entry) => entry.name === 'chat' && entry.enabled !== false);
   const inbox = dock.find((entry) => entry.name === 'inbox' && entry.enabled !== false);
 
   if (!messageBoard) {

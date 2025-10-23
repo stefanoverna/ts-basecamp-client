@@ -9,7 +9,7 @@ export function buildClient(options: InitClientOptions) {
     baseUrl: `https://3.basecampapi.com/${options.accountId}`,
     baseHeaders: {
       Authorization: `Bearer ${options.bearerToken}`,
-      'User-Agent': options.userAgent,
+      ...(options.userAgent ? { 'User-Agent': options.userAgent } : {}),
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
