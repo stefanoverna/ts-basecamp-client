@@ -26,6 +26,12 @@ import { peopleRouter } from './resources/people';
 import { projectsRouter } from './resources/projects';
 import { recordingsRouter } from './resources/recordings';
 import {
+  cardTableCardsRouter,
+  cardTableColumnsRouter,
+  cardTableStepsRouter,
+  cardTablesRouter,
+} from './resources/kanban';
+import {
   questionnairesRouter,
   questionsRouter,
   scheduleEntriesRouter,
@@ -53,6 +59,10 @@ export const contract = c.router(
     messageTypes: messageTypesRouter,
     messages: messagesRouter,
     comments: commentsRouter,
+    cardTables: cardTablesRouter,
+    cardTableColumns: cardTableColumnsRouter,
+    cardTableCards: cardTableCardsRouter,
+    cardTableSteps: cardTableStepsRouter,
     campfires: campfiresRouter,
     inboxes: inboxesRouter,
     forwards: forwardsRouter,

@@ -250,7 +250,7 @@ describe('Basecamp communications (live)', () => {
     expect(hideResponse.status).toBe(200);
     const hiddenMessage = ClientVisibilityRecordingSchema.parse(hideResponse.body);
     expect(hiddenMessage.visible_to_clients).toBe(false);
-  });
+  }, 15000);
 
   it('updates and fetches the message type', async () => {
     if (messageTypeId === undefined) {
