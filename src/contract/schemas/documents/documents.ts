@@ -1,34 +1,10 @@
 import { z } from 'zod';
 
-import {
-  BasecampIdSchema,
-  BucketRefSchema,
-  HtmlStringSchema,
-  IsoDateTimeSchema,
-  PersonSummarySchema,
-  RecordingRefSchema,
-  RecordingStatusSchema,
-} from '../common';
+import { HtmlStringSchema } from '../common';
+import { RecordingBaseSchema } from '../recordings';
 
-export const DocumentCoreSchema = z.object({
-  id: BasecampIdSchema,
-  status: RecordingStatusSchema,
-  visible_to_clients: z.boolean(),
-  created_at: IsoDateTimeSchema,
-  updated_at: IsoDateTimeSchema,
-  title: z.string(),
-  inherits_status: z.boolean(),
+export const DocumentCoreSchema = RecordingBaseSchema.extend({
   type: z.literal('Document'),
-  url: z.string().url(),
-  app_url: z.string().url(),
-  bookmark_url: z.string().url(),
-  subscription_url: z.string().url(),
-  comments_count: z.number().int().nonnegative(),
-  comments_url: z.string().url(),
-  position: z.number().int().nonnegative(),
-  parent: RecordingRefSchema,
-  bucket: BucketRefSchema,
-  creator: PersonSummarySchema,
 });
 
 export const DocumentSchema = DocumentCoreSchema.extend({

@@ -1,31 +1,10 @@
 import { z } from 'zod';
 
-import {
-  BasecampIdSchema,
-  BucketRefSchema,
-  HtmlStringSchema,
-  IsoDateTimeSchema,
-  PersonSummarySchema,
-  RecordingRefSchema,
-  RecordingStatusSchema,
-} from '../common';
+import { HtmlStringSchema } from '../common';
+import { RecordingBaseSchema } from '../recordings';
 
-export const ClientCorrespondenceSchema = z.object({
-  id: BasecampIdSchema,
-  status: RecordingStatusSchema,
-  visible_to_clients: z.boolean(),
-  created_at: IsoDateTimeSchema,
-  updated_at: IsoDateTimeSchema,
-  title: z.string(),
-  inherits_status: z.boolean(),
-  type: z.string(),
-  url: z.string().url(),
-  app_url: z.string().url(),
-  bookmark_url: z.string().url().optional(),
-  subscription_url: z.string().url().optional(),
-  parent: RecordingRefSchema,
-  bucket: BucketRefSchema,
-  creator: PersonSummarySchema,
+export const ClientCorrespondenceSchema = RecordingBaseSchema.extend({
+  type: z.literal('Client::Correspondence'),
   content: HtmlStringSchema,
   subject: z.string(),
   replies_count: z.number().int().nonnegative(),

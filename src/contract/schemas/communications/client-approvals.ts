@@ -1,53 +1,18 @@
 import { z } from 'zod';
 
-import {
-  BasecampIdSchema,
-  BucketRefSchema,
-  HtmlStringSchema,
-  IsoDateSchema,
-  IsoDateTimeSchema,
-  PersonSummarySchema,
-  RecordingRefSchema,
-  RecordingStatusSchema,
-} from '../common';
+import { HtmlStringSchema, IsoDateSchema, PersonSummarySchema } from '../common';
+import { RecordingBaseSchema } from '../recordings';
 
 const ApprovalStatusEnum = z.enum(['pending', 'approved', 'rejected']).or(z.string());
 
-export const ClientApprovalResponseSchema = z.object({
-  id: BasecampIdSchema,
-  status: RecordingStatusSchema,
-  visible_to_clients: z.boolean(),
-  created_at: IsoDateTimeSchema,
-  updated_at: IsoDateTimeSchema,
-  title: z.string(),
-  inherits_status: z.boolean(),
-  type: z.string(),
-  url: z.string().url().optional(),
-  app_url: z.string().url(),
-  bookmark_url: z.string().url().optional(),
-  parent: RecordingRefSchema,
-  bucket: BucketRefSchema,
-  creator: PersonSummarySchema,
+export const ClientApprovalResponseSchema = RecordingBaseSchema.extend({
+  type: z.literal('Client::Approval::Response'),
   content: HtmlStringSchema,
   approved: z.boolean().optional(),
 });
 
-export const ClientApprovalSchema = z.object({
-  id: BasecampIdSchema,
-  status: RecordingStatusSchema,
-  visible_to_clients: z.boolean(),
-  created_at: IsoDateTimeSchema,
-  updated_at: IsoDateTimeSchema,
-  title: z.string(),
-  inherits_status: z.boolean(),
-  type: z.string(),
-  url: z.string().url(),
-  app_url: z.string().url(),
-  bookmark_url: z.string().url().optional(),
-  subscription_url: z.string().url().optional(),
-  parent: RecordingRefSchema,
-  bucket: BucketRefSchema,
-  creator: PersonSummarySchema,
+export const ClientApprovalSchema = RecordingBaseSchema.extend({
+  type: z.literal('Client::Approval'),
   content: HtmlStringSchema,
   subject: z.string(),
   due_on: IsoDateSchema.nullable(),

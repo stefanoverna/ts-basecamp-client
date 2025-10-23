@@ -1,14 +1,10 @@
 import { z } from 'zod';
 
-import {
-  BasecampIdSchema,
-  HtmlStringSchema,
-  IsoDateSchema,
-  KanbanRecordingCoreSchema,
-  PersonSummarySchema,
-} from './common';
+import { RecordingBaseSchema } from '../recordings';
+import { BasecampIdSchema, HtmlStringSchema, IsoDateSchema, PersonSummarySchema } from './common';
 
-export const CardTableStepSchema = KanbanRecordingCoreSchema.extend({
+export const CardTableStepSchema = RecordingBaseSchema.extend({
+  type: z.literal('Kanban::Step'),
   completed: z.boolean(),
   due_on: IsoDateSchema.nullable().optional(),
   assignees: z.array(PersonSummarySchema),

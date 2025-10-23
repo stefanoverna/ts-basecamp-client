@@ -1,30 +1,9 @@
 import { z } from 'zod';
 
-import {
-  BasecampIdSchema,
-  BucketRefSchema,
-  IsoDateTimeSchema,
-  PersonSummarySchema,
-  RecordingRefSchema,
-  RecordingStatusSchema,
-} from '../common';
+import { RecordingBaseSchema } from '../recordings';
 
-export const VaultCoreSchema = z.object({
-  id: BasecampIdSchema,
-  status: RecordingStatusSchema,
-  visible_to_clients: z.boolean(),
-  created_at: IsoDateTimeSchema,
-  updated_at: IsoDateTimeSchema,
-  title: z.string(),
-  inherits_status: z.boolean(),
+export const VaultCoreSchema = RecordingBaseSchema.extend({
   type: z.literal('Vault'),
-  url: z.string().url(),
-  app_url: z.string().url(),
-  bookmark_url: z.string().url(),
-  position: z.number().int().nonnegative(),
-  parent: RecordingRefSchema.optional(),
-  bucket: BucketRefSchema,
-  creator: PersonSummarySchema,
 });
 
 export const VaultSchema = VaultCoreSchema.extend({

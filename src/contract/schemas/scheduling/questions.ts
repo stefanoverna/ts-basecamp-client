@@ -1,13 +1,6 @@
 import { z } from 'zod';
 
-import {
-  BasecampIdSchema,
-  BucketRefSchema,
-  IsoDateTimeSchema,
-  PersonSummarySchema,
-  RecordingRefSchema,
-  RecordingStatusSchema,
-} from '../common';
+import { RecordingBaseSchema } from '../recordings';
 
 /**
  * Question schedule configuration.
@@ -27,22 +20,8 @@ export const QuestionScheduleSchema = z.object({
 /**
  * Complete question resource.
  */
-export const QuestionSchema = z.object({
-  id: BasecampIdSchema,
-  status: RecordingStatusSchema,
-  visible_to_clients: z.boolean(),
-  created_at: IsoDateTimeSchema,
-  updated_at: IsoDateTimeSchema,
-  title: z.string(),
-  inherits_status: z.boolean(),
+export const QuestionSchema = RecordingBaseSchema.extend({
   type: z.literal('Question'),
-  url: z.string().url(),
-  app_url: z.string().url(),
-  bookmark_url: z.string().url(),
-  subscription_url: z.string().url(),
-  parent: RecordingRefSchema,
-  bucket: BucketRefSchema,
-  creator: PersonSummarySchema,
   paused: z.boolean(),
   schedule: QuestionScheduleSchema,
   answers_count: z.number().int(),

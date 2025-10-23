@@ -1,32 +1,9 @@
 import { z } from 'zod';
 
-import {
-  BasecampIdSchema,
-  BucketRefSchema,
-  IsoDateTimeSchema,
-  PersonSummarySchema,
-  RecordingRefSchema,
-  RecordingStatusSchema,
-} from '../common';
+import { RecordingBaseSchema } from '../recordings';
 
-const MessageBoardRecordingCoreSchema = z.object({
-  id: BasecampIdSchema,
-  status: RecordingStatusSchema,
-  visible_to_clients: z.boolean(),
-  created_at: IsoDateTimeSchema,
-  updated_at: IsoDateTimeSchema,
-  title: z.string(),
-  inherits_status: z.boolean(),
-  type: z.string(),
-  url: z.string().url(),
-  app_url: z.string().url(),
-  bookmark_url: z.string().url().optional(),
-  position: z.number().int().nonnegative().optional(),
-  bucket: BucketRefSchema,
-  creator: PersonSummarySchema,
-});
-
-export const MessageBoardSchema = MessageBoardRecordingCoreSchema.extend({
+export const MessageBoardSchema = RecordingBaseSchema.extend({
+  type: z.literal('Message::Board'),
   messages_count: z.number().int().nonnegative(),
   messages_url: z.string().url(),
   app_messages_url: z.string().url(),

@@ -1,25 +1,16 @@
 import { z } from 'zod';
 
-import {
-  BasecampIdSchema,
-  HtmlStringSchema,
-  IsoDateSchema,
-  KanbanRecordingCoreSchema,
-  PersonSummarySchema,
-  RecordingRefSchema,
-} from './common';
+import { RecordingBaseSchema } from '../recordings';
+import { BasecampIdSchema, HtmlStringSchema, IsoDateSchema, PersonSummarySchema } from './common';
 import { CardTableStepSchema } from './steps';
 
-export const CardTableCardSchema = KanbanRecordingCoreSchema.extend({
-  parent: RecordingRefSchema,
+export const CardTableCardSchema = RecordingBaseSchema.extend({
+  type: z.literal('Kanban::Card'),
   description: HtmlStringSchema.nullable().optional(),
   completed: z.boolean(),
   content: HtmlStringSchema.nullable().optional(),
   due_on: IsoDateSchema.nullable().optional(),
-  comments_count: z.number().int().nonnegative().optional(),
-  comments_url: z.string().url().optional(),
   comment_count: z.number().int().nonnegative().optional(),
-  position: z.number().int().nonnegative(),
   assignees: z.array(PersonSummarySchema),
   completion_subscribers: z.array(PersonSummarySchema),
   completion_url: z.string().min(1),

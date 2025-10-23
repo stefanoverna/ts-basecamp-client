@@ -1,32 +1,11 @@
 import { z } from 'zod';
 
-import {
-  BasecampIdSchema,
-  BucketRefSchema,
-  IsoDateTimeSchema,
-  PersonSummarySchema,
-  RecordingRefSchema,
-  RecordingStatusSchema,
-} from '../common';
+import { RecordingBaseSchema } from '../recordings';
 
-export const CampfireSchema = z.object({
-  id: BasecampIdSchema,
-  status: RecordingStatusSchema,
-  visible_to_clients: z.boolean(),
-  created_at: IsoDateTimeSchema,
-  updated_at: IsoDateTimeSchema,
-  title: z.string(),
-  inherits_status: z.boolean(),
-  type: z.string(),
-  url: z.string().url(),
-  app_url: z.string().url(),
-  bookmark_url: z.string().url().optional(),
-  subscription_url: z.string().url().optional(),
-  position: z.number().int().optional(),
+export const CampfireSchema = RecordingBaseSchema.extend({
+  type: z.literal('Chat::Transcript'),
   topic: z.string(),
   lines_url: z.string().url(),
-  bucket: BucketRefSchema,
-  creator: PersonSummarySchema,
 });
 
 export const CampfireListResponseSchema = z.array(CampfireSchema);
@@ -35,21 +14,8 @@ export const CampfireListQuerySchema = z.object({
   page: z.coerce.number().int().positive().optional(),
 });
 
-export const CampfireLineSchema = z.object({
-  id: BasecampIdSchema,
-  status: RecordingStatusSchema,
-  visible_to_clients: z.boolean(),
-  created_at: IsoDateTimeSchema,
-  updated_at: IsoDateTimeSchema,
-  title: z.string(),
-  inherits_status: z.boolean(),
-  type: z.string(),
-  url: z.string().url(),
-  app_url: z.string().url(),
-  bookmark_url: z.string().url().optional(),
-  parent: RecordingRefSchema,
-  bucket: BucketRefSchema,
-  creator: PersonSummarySchema,
+export const CampfireLineSchema = RecordingBaseSchema.extend({
+  type: z.enum(['Chat::Lines::Text', 'Chat::Lines::RichText']),
   content: z.string(),
 });
 

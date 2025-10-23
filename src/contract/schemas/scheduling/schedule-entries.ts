@@ -2,13 +2,11 @@ import { z } from 'zod';
 
 import {
   BasecampIdSchema,
-  BucketRefSchema,
   HtmlStringSchema,
-  IsoDateTimeSchema,
   PersonSummarySchema,
-  RecordingRefSchema,
   RecordingStatusSchema,
 } from '../common';
+import { RecordingBaseSchema } from '../recordings';
 
 /**
  * Recurrence schedule for recurring schedule entries.
@@ -28,24 +26,8 @@ export const RecurrenceScheduleSchema = z.object({
 /**
  * Complete schedule entry resource.
  */
-export const ScheduleEntrySchema = z.object({
-  id: BasecampIdSchema,
-  status: RecordingStatusSchema,
-  visible_to_clients: z.boolean(),
-  created_at: IsoDateTimeSchema,
-  updated_at: IsoDateTimeSchema,
-  title: z.string(),
-  inherits_status: z.boolean(),
+export const ScheduleEntrySchema = RecordingBaseSchema.extend({
   type: z.literal('Schedule::Entry'),
-  url: z.string().url(),
-  app_url: z.string().url(),
-  bookmark_url: z.string().url(),
-  subscription_url: z.string().url(),
-  comments_count: z.number().int(),
-  comments_url: z.string().url(),
-  parent: RecordingRefSchema,
-  bucket: BucketRefSchema,
-  creator: PersonSummarySchema,
   description: HtmlStringSchema,
   summary: z.string(),
   all_day: z.boolean(),
