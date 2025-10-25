@@ -216,3 +216,15 @@ export async function* asyncPagedIterator<
     currentRequest = withPage(currentRequest, nextPage);
   }
 }
+
+export async function asyncPagedToArray<
+  TRoute extends RouteExecutor,
+  TStatus extends number = 200,
+  TItem = DefaultItem<TRoute, TStatus>,
+>(options: AsyncPagedIteratorOptions<TRoute, TStatus, TItem>): Promise<TItem[]> {
+  const results: TItem[] = [];
+  for await (const item of asyncPagedIterator<TRoute, TStatus, TItem>(options)) {
+    results.push(item);
+  }
+  return results;
+}

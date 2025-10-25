@@ -1,7 +1,12 @@
 import { z } from 'zod';
 
 import { RecordingBaseSchema } from '../recordings';
-import { BasecampIdSchema, HtmlStringSchema, KanbanColumnColorSchema, PersonSummarySchema } from './common';
+import {
+  BasecampIdSchema,
+  HtmlStringSchema,
+  KanbanColumnColorSchema,
+  PersonSummarySchema,
+} from './common';
 
 export const CardTableColumnSchema = RecordingBaseSchema.extend({
   type: z.enum(['Kanban::Column', 'Kanban::Triage', 'Kanban::NotNowColumn', 'Kanban::DoneColumn']),

@@ -1,6 +1,11 @@
 import { z } from 'zod';
 
-import { BasecampIdSchema, HtmlStringSchema, IsoDateTimeSchema, PersonSummarySchema } from '../common';
+import {
+  BasecampIdSchema,
+  HtmlStringSchema,
+  IsoDateTimeSchema,
+  PersonSummarySchema,
+} from '../common';
 import { RecordingBaseSchema } from '../recordings';
 
 const TodoCompletionSchema = z.object({
