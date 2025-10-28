@@ -12,7 +12,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "openapi.json"
   ],
   "repository": {
     "type": "git",
@@ -22,13 +23,14 @@
     "doc": "docs"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "npm run openapi:generate && tsup",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "contract:check": "tsc --noEmit",
     "format": "biome format --write .",
     "lint": "biome lint .",
     "check": "biome check .",
+    "openapi:generate": "tsx scripts/generate-openapi.ts",
     "prepublishOnly": "npm run build"
   },
   "author": "Stefano Verna <s.verna@datocms.com>",
@@ -39,7 +41,9 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@anatine/zod-openapi": "^2.2.8",
     "@biomejs/biome": "^2.2.7",
+    "@ts-rest/open-api": "^3.52.1",
     "@types/node": "^22",
     "dotenv": "^17.2.3",
     "np": "^10.2.0",
