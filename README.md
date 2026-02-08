@@ -1,6 +1,6 @@
 # basecamp-client
 
-TypeScript client for Basecamp 3 with typed requests and responses, automatic pagination, rate-limit retries, and OAuth token refresh.
+TypeScript client for Basecamp 4 with typed requests and responses, automatic pagination, rate-limit retries, and OAuth token refresh.
 
 ## Installation
 
@@ -103,7 +103,7 @@ Options:
 
 ## Supported resources
 
-The client covers the following Basecamp 3 API resources. Each resource is accessed as a property on the client object (e.g. `client.projects`, `client.todos`).
+The client covers the following Basecamp 4 API resources. Each resource is accessed as a property on the client object (e.g. `client.projects`, `client.todos`).
 
 ### Projects and core
 
