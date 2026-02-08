@@ -244,6 +244,7 @@ Because the contract is a plain data structure (not tied to any HTTP library), i
 - **OpenAPI generation** -- the package already ships an `openapi.json` built from the contract. You can regenerate it or use the contract to produce docs, mock servers, or SDK stubs for other languages.
 - **Server-side validation** -- if you build a Basecamp proxy or middleware, the same Zod schemas that type-check the client can validate incoming requests on the server.
 - **Shared types** -- import the contract's inferred types into any TypeScript project so that producers and consumers of Basecamp data agree on the same shapes at compile time.
+- **Runtime introspection** -- because the contract is a plain object with Zod schemas, you can iterate over its routes, inspect parameter and response schemas, or build tooling (e.g. CLI generators, permission auditors) that adapts automatically as the contract grows.
 
 ### Use the contract directly
 
