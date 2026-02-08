@@ -1,6 +1,6 @@
 # basecamp-client
 
-Basecamp API client and contract built with `ts-rest`. The package exposes a fully typed contract, a ready-to-use client builder, and OAuth helpers so teams can share a single source of truth across services, CLIs, and tests.
+TypeScript client for Basecamp 3 with typed requests and responses, automatic pagination, rate-limit retries, and OAuth token refresh.
 
 ## Installation
 
@@ -8,6 +8,28 @@ Basecamp API client and contract built with `ts-rest`. The package exposes a ful
 npm install basecamp-client
 # or
 yarn add basecamp-client
+```
+
+Both CommonJS (`require`) and ESM (`import`) entry points are included, along with full TypeScript declarations.
+
+## Quick start
+
+```ts
+import { buildClient, getBearerToken } from 'basecamp-client';
+
+const bearerToken = await getBearerToken({
+  clientId: process.env.BASECAMP_CLIENT_ID!,
+  clientSecret: process.env.BASECAMP_CLIENT_SECRET!,
+  refreshToken: process.env.BASECAMP_REFRESH_TOKEN!,
+});
+
+const client = buildClient({
+  bearerToken,
+  accountId: process.env.BASECAMP_ACCOUNT_ID!,
+});
+
+const { body: projects } = await client.projects.list({ query: {} });
+console.log(projects);
 ```
 
 ## Usage
@@ -20,27 +42,17 @@ import { buildClient } from 'basecamp-client';
 const client = buildClient({
   bearerToken: process.env.BASECAMP_ACCESS_TOKEN!,
   accountId: process.env.BASECAMP_ACCOUNT_ID!,
-  userAgent: process.env.BASECAMP_USER_AGENT!,
+  userAgent: process.env.BASECAMP_USER_AGENT!, // optional but recommended by Basecamp
 });
 
-const projects = await client.projects.list({ query: {} });
-console.log(projects.body);
+const { status, body } = await client.projects.list({ query: {} });
 ```
 
-### Iterate through paginated endpoints
-
-```ts
-for await (const project of asyncPagedIterator({
-  fetchPage: client.projects.list,
-  request: { query: {} },
-})) {
-  console.log(project.name);
-}
-```
-
-`asyncPagedIterator` follows the `Link` response headers emitted by Basecamp collection routes, automatically fetching `page=2`, `page=3`, and beyond until the API signals the final page. The helper yields each item returned by the underlying endpoint or lets you define a custom `extractItems` function for non-array responses.
+`buildClient` creates a ts-rest client that targets `https://3.basecampapi.com/{accountId}`. It sets `Authorization`, `Accept`, and `Content-Type` headers automatically and appends `.json` to every request path.
 
 ### Refresh OAuth tokens
+
+Basecamp access tokens expire. Use `getBearerToken` to exchange a refresh token for a fresh access token via the 37signals OAuth endpoint:
 
 ```ts
 import { getBearerToken } from 'basecamp-client';
@@ -51,21 +63,204 @@ const bearerToken = await getBearerToken({
   refreshToken: process.env.BASECAMP_REFRESH_TOKEN!,
   userAgent: process.env.BASECAMP_USER_AGENT!,
 });
+```
 
-const client = buildClient({
-  bearerToken: bearerToken,
-  accountId: process.env.BASECAMP_ACCOUNT_ID!,
-  userAgent: process.env.BASECAMP_USER_AGENT!,
+### Iterate through paginated endpoints
+
+Basecamp collection endpoints return paginated results using `Link` headers. `asyncPagedIterator` follows those headers automatically:
+
+```ts
+import { asyncPagedIterator } from 'basecamp-client';
+
+for await (const project of asyncPagedIterator({
+  fetchPage: client.projects.list,
+  request: { query: {} },
+})) {
+  console.log(project.name);
+}
+```
+
+To collect all pages into a single array:
+
+```ts
+import { asyncPagedToArray } from 'basecamp-client';
+
+const allProjects = await asyncPagedToArray({
+  fetchPage: client.projects.list,
+  request: { query: {} },
 });
 ```
 
-### Contract access
+Options:
+
+| Option | Description |
+| --- | --- |
+| `fetchPage` | The client method to call (e.g. `client.projects.list`). |
+| `request` | Arguments forwarded to `fetchPage`. |
+| `successStatus` | Expected HTTP status (default `200`). |
+| `extractItems` | Custom function to pull items from the response (defaults to using `body` as an array). |
+| `maxPages` | Stop after this many pages. |
+
+## Supported resources
+
+The client covers the following Basecamp 3 API resources. Each resource is accessed as a property on the client object (e.g. `client.projects`, `client.todos`).
+
+### Projects and core
+
+| Client property | Operations |
+| --- | --- |
+| `projects` | list, get, create, update, trash |
+| `people` | list, listForProject, listPingable, get, me, updateProjectAccess |
+| `recordings` | list, trash, archive, activate |
+| `events` | listForRecording |
+| `lineupMarkers` | create, update, destroy |
+
+### Messages and communication
+
+| Client property | Operations |
+| --- | --- |
+| `messageBoards` | get, listForProject |
+| `messages` | list, get, create, update, pin, unpin, trash |
+| `messageTypes` | list, get, create, update, destroy |
+| `comments` | list, get, create, update, trash |
+| `campfires` | list, get, listLines, getLine, createLine, deleteLine |
+| `inboxes` | get |
+| `forwards` | list, get, trash |
+| `inboxReplies` | list, get |
+| `clientCorrespondences` | list, get |
+| `clientApprovals` | list, get |
+| `clientReplies` | list, get |
+| `clientVisibility` | update |
+
+### To-dos
+
+| Client property | Operations |
+| --- | --- |
+| `todoSets` | get |
+| `todoLists` | list, get, create, update, trash |
+| `todoListGroups` | list, create, reposition |
+| `todos` | list, get, create, update, complete, uncomplete, reposition, trash |
+
+### Card tables (Kanban)
+
+| Client property | Operations |
+| --- | --- |
+| `cardTables` | get |
+| `cardTableColumns` | get, create, update, move, watch, unwatch, enableOnHold, disableOnHold, updateColor |
+| `cardTableCards` | list, get, create, update, move |
+| `cardTableSteps` | create, update, setCompletion, reposition |
+
+### Scheduling
+
+| Client property | Operations |
+| --- | --- |
+| `schedules` | get, update |
+| `scheduleEntries` | list, get, getOccurrence, create, update, trash |
+| `questionnaires` | get |
+| `questions` | list, get |
+
+### Documents and files
+
+| Client property | Operations |
+| --- | --- |
+| `vaults` | list, get, create, update, trash |
+| `documents` | list, get, create, update, trash |
+| `uploads` | list, get, create, update, trash |
+| `attachments` | create |
+
+## Conventions
+
+### Path parameters
+
+Most resource-scoped endpoints require a `bucketId` parameter (the Basecamp project ID) along with a resource-specific ID. All IDs are non-negative integers, coerced from path parameters via Zod.
+
+```ts
+// Fetch a single to-do
+const { body: todo } = await client.todos.get({
+  params: { bucketId: 12345, todoId: 67890 },
+});
+```
+
+### Recording-based status changes
+
+Basecamp models many resources (messages, to-dos, documents, etc.) as "recordings". Trashing, archiving, and re-activating use a shared endpoint pattern through the `recordings` resource:
+
+```ts
+// Trash any recording
+await client.recordings.trash({
+  params: { bucketId: 12345, recordingId: 67890 },
+});
+```
+
+Individual resources also expose convenience `trash` operations that map to the same underlying endpoint.
+
+### Querying and filtering
+
+Collection endpoints accept query parameters for filtering and sorting:
+
+```ts
+const { body: todos } = await client.todos.list({
+  params: { bucketId: 12345, todolistId: 67890 },
+  query: { status: 'active', completed: 'true' },
+});
+```
+
+Common query parameters across resources:
+
+| Parameter | Values |
+| --- | --- |
+| `status` | `active`, `archived`, `trashed` |
+| `sort` | `created_at`, `updated_at` |
+| `direction` | `asc`, `desc` |
+| `page` | Page number (1-indexed) |
+
+### Rate-limit handling
+
+The built-in fetcher automatically retries on HTTP 429 responses (up to 20 attempts). It uses linear backoff with jitter and respects the `Retry-After` header when present. No configuration is needed.
+
+### Error handling
+
+The client is configured with `throwOnUnknownStatus: true`, meaning any response with a status code not declared in the contract will throw. Expected error statuses (404, 507, etc.) are part of the contract and returned as typed discriminated unions:
+
+```ts
+const response = await client.projects.get({
+  params: { projectId: 999 },
+});
+
+if (response.status === 404) {
+  console.log('Project not found');
+} else {
+  console.log(response.body.name);
+}
+```
+
+## The contract
+
+Under the hood, every endpoint in this package is defined as a [ts-rest contract](https://ts-rest.com/). A contract is a declarative description of an API: its routes, path parameters, query parameters, request bodies, and response shapes -- all expressed with Zod schemas. The client you get from `buildClient` is generated directly from this contract, which is what makes every call fully type-safe with no code generation step.
+
+Because the contract is a plain data structure (not tied to any HTTP library), it can be reused in ways that go beyond making API calls:
+
+- **Custom fetchers** -- pass the contract to `initClient` from `@ts-rest/core` with your own fetch wrapper (e.g. to add logging, custom auth, or use a different HTTP library).
+- **OpenAPI generation** -- the package already ships an `openapi.json` built from the contract. You can regenerate it or use the contract to produce docs, mock servers, or SDK stubs for other languages.
+- **Server-side validation** -- if you build a Basecamp proxy or middleware, the same Zod schemas that type-check the client can validate incoming requests on the server.
+- **Shared types** -- import the contract's inferred types into any TypeScript project so that producers and consumers of Basecamp data agree on the same shapes at compile time.
+- **Runtime introspection** -- because the contract is a plain object with Zod schemas, you can iterate over its routes, inspect parameter and response schemas, or build tooling (e.g. CLI generators, permission auditors) that adapts automatically as the contract grows.
+
+### Use the contract directly
 
 ```ts
 import { contract } from 'basecamp-client';
 import { initClient } from '@ts-rest/core';
 
 const client = initClient(contract, { /* custom fetcher config */ });
+```
+
+### Type exports
+
+The package exports the `Client` and `Contract` types, as well as Zod-inferred types for every schema:
+
+```ts
+import type { Client, Contract } from 'basecamp-client';
 ```
 
 ## Development
@@ -76,10 +271,10 @@ npm install
 
 ### Scripts
 
-- `npm run build` – bundle the package with tsup (CJS + ESM + types).
-- `npm run contract:check` – type-check the contract with `tsc --noEmit`.
-- `npm test` – execute the Vitest live smoke suite *(requires Basecamp credentials and hits the real API)*.
-- `npm run format` / `npm run lint` / `npm run check` – Biome formatting and linting utilities.
+- `npm run build` -- bundle the package with tsup (CJS + ESM + types).
+- `npm run contract:check` -- type-check the contract with `tsc --noEmit`.
+- `npm test` -- execute the Vitest live smoke suite *(requires Basecamp credentials and hits the real API)*.
+- `npm run format` / `npm run lint` / `npm run check` -- Biome formatting and linting utilities.
 
 ### Environment variables
 
@@ -113,3 +308,7 @@ npm test
 ```bash
 npm publish
 ```
+
+## License
+
+MIT
