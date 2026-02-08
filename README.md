@@ -101,25 +101,6 @@ Options:
 | `extractItems` | Custom function to pull items from the response (defaults to using `body` as an array). |
 | `maxPages` | Stop after this many pages. |
 
-### Use the contract directly
-
-The raw ts-rest contract is exported for advanced use cases such as plugging in a custom fetcher or generating an OpenAPI spec:
-
-```ts
-import { contract } from 'basecamp-client';
-import { initClient } from '@ts-rest/core';
-
-const client = initClient(contract, { /* custom fetcher config */ });
-```
-
-### Type exports
-
-The package exports the `Client` and `Contract` types, as well as Zod-inferred types for every schema:
-
-```ts
-import type { Client, Contract } from 'basecamp-client';
-```
-
 ## Supported resources
 
 The client covers the following Basecamp 3 API resources. Each resource is accessed as a property on the client object (e.g. `client.projects`, `client.todos`).
@@ -251,6 +232,34 @@ if (response.status === 404) {
 } else {
   console.log(response.body.name);
 }
+```
+
+## The contract
+
+Under the hood, every endpoint in this package is defined as a [ts-rest contract](https://ts-rest.com/). A contract is a declarative description of an API: its routes, path parameters, query parameters, request bodies, and response shapes -- all expressed with Zod schemas. The client you get from `buildClient` is generated directly from this contract, which is what makes every call fully type-safe with no code generation step.
+
+Because the contract is a plain data structure (not tied to any HTTP library), it can be reused in ways that go beyond making API calls:
+
+- **Custom fetchers** -- pass the contract to `initClient` from `@ts-rest/core` with your own fetch wrapper (e.g. to add logging, custom auth, or use a different HTTP library).
+- **OpenAPI generation** -- the package already ships an `openapi.json` built from the contract. You can regenerate it or use the contract to produce docs, mock servers, or SDK stubs for other languages.
+- **Server-side validation** -- if you build a Basecamp proxy or middleware, the same Zod schemas that type-check the client can validate incoming requests on the server.
+- **Shared types** -- import the contract's inferred types into any TypeScript project so that producers and consumers of Basecamp data agree on the same shapes at compile time.
+
+### Use the contract directly
+
+```ts
+import { contract } from 'basecamp-client';
+import { initClient } from '@ts-rest/core';
+
+const client = initClient(contract, { /* custom fetcher config */ });
+```
+
+### Type exports
+
+The package exports the `Client` and `Contract` types, as well as Zod-inferred types for every schema:
+
+```ts
+import type { Client, Contract } from 'basecamp-client';
 ```
 
 ## Development
