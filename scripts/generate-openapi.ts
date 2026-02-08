@@ -24,7 +24,7 @@ const openApiDocument = generateOpenApi(
     servers: [
       {
         url: 'https://3.basecampapi.com/{accountId}',
-        description: 'Basecamp 3 API',
+        description: 'Basecamp 4 API',
         variables: {
           accountId: {
             default: 'your-account-id',
