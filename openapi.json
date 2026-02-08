@@ -2537,8 +2537,14 @@
                     "required": [
                       "id",
                       "type",
+                      "status",
+                      "title",
+                      "created_at",
+                      "updated_at",
                       "url",
-                      "app_url"
+                      "app_url",
+                      "bucket",
+                      "creator"
                     ],
                     "additionalProperties": true
                   }
@@ -30700,8 +30706,14 @@
                   "required": [
                     "id",
                     "type",
+                    "status",
+                    "title",
+                    "created_at",
+                    "updated_at",
                     "url",
-                    "app_url"
+                    "app_url",
+                    "bucket",
+                    "creator"
                   ],
                   "additionalProperties": true
                 }

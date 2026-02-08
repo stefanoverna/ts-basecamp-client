@@ -54,15 +54,15 @@ export const RecordingSummarySchema = z
   .object({
     id: BasecampIdSchema,
     type: z.string(),
-    status: RecordingStatusSchema.optional(),
-    title: z.string().optional(),
-    created_at: IsoDateTimeSchema.optional(),
-    updated_at: IsoDateTimeSchema.optional(),
+    status: RecordingStatusSchema,
+    title: z.string(),
+    created_at: IsoDateTimeSchema,
+    updated_at: IsoDateTimeSchema,
     url: z.string().url(),
     app_url: z.string().url(),
-    bucket: BucketRefSchema.optional(),
+    bucket: BucketRefSchema,
     parent: RecordingRefSchema.optional(),
-    creator: PersonSummarySchema.optional(),
+    creator: PersonSummarySchema,
   })
   .passthrough();
 
