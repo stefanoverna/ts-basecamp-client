@@ -1,6 +1,6 @@
 # basecamp-client
 
-Basecamp API client and contract built with [`ts-rest`](https://ts-rest.com/) and [Zod](https://zod.dev/). The package exposes a fully typed contract, a ready-to-use client builder, and OAuth helpers so teams can share a single source of truth across services, CLIs, and tests.
+TypeScript client for Basecamp 3 with typed requests and responses, automatic pagination, rate-limit retries, and OAuth token refresh.
 
 ## Installation
 
