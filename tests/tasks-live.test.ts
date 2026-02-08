@@ -248,7 +248,7 @@ describe('Basecamp todos (live)', () => {
       });
       expect(trashListResponse.status).toBe(204);
     }
-  }, 20000);
+  });
 });
 
 async function resolveTodoSetId(client: Client, bucket: number): Promise<number> {

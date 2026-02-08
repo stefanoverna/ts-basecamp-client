@@ -255,7 +255,7 @@ describe('Basecamp documents (live)', () => {
         expect(trashVaultResponse.status).toBe(204);
       }
     }
-  }, 20000);
+  });
 });
 
 async function resolveVaultId(client: Client, bucket: number): Promise<number> {

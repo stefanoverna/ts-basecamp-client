@@ -240,7 +240,7 @@ describe('Basecamp card tables (live)', () => {
       });
       expect([200, 204]).toContain(trashColumnResponse.status);
     }
-  }, 30000);
+  });
 });
 
 async function resolveCardTableId(client: Client, bucket: number): Promise<number> {

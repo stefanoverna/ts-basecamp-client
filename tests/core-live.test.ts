@@ -51,7 +51,7 @@ describe('Basecamp core resources (live)', () => {
     });
     expect(projectGetResponse.status).toBe(200);
     ProjectSchema.parse(projectGetResponse.body);
-  }, 20000);
+  });
 
   it('manages people access flows', async () => {
     const peopleListResponse = await client.people.list({
@@ -95,7 +95,7 @@ describe('Basecamp core resources (live)', () => {
     });
     expect(accessResponse.status).toBe(200);
     ProjectPeopleAccessResponseSchema.parse(accessResponse.body);
-  }, 20000);
+  });
 
   it('performs message and recording lifecycle operations', async () => {
     const messageSubject = `Contract message ${Date.now()}`;
@@ -184,7 +184,7 @@ describe('Basecamp core resources (live)', () => {
         });
       }
     }
-  }, 20000);
+  });
 });
 
 async function resolveMessageBoardId(client: Client, bucket: number): Promise<number> {

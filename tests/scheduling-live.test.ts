@@ -183,7 +183,7 @@ describe('Basecamp scheduling (live)', () => {
       expect(questionGetResponse.status).toBe(200);
       QuestionSchema.parse(questionGetResponse.body);
     }
-  }, 20000);
+  });
 });
 
 async function resolveScheduleId(client: Client, bucket: number): Promise<number> {
