@@ -41,17 +41,40 @@ const computeBackoffDelay = (attempt: number, retryAfterMs?: number) => {
 
 export async function fetcher(args: ApiFetcherArgs) {
   const url = new URL(args.path);
-  if (!url.pathname.endsWith('.json')) {
+  const isRaw = (args.route as any).metadata?.rawResponse === true;
+
+  if (!isRaw && !url.pathname.endsWith('.json')) {
     url.pathname = `${url.pathname}.json`;
+  }
+
+  const headers = { ...args.headers };
+  if (isRaw) {
+    delete headers.accept;
+    delete headers.Accept;
   }
 
   const pathWithSuffix = url.toString();
 
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt += 1) {
-    const response = await tsRestFetchApi({
-      ...args,
-      path: pathWithSuffix,
-    });
+    let response;
+
+    if (isRaw) {
+      const result = await fetch(pathWithSuffix, {
+        method: args.method,
+        headers,
+      });
+      response = {
+        status: result.status,
+        body: await result.arrayBuffer(),
+        headers: result.headers,
+      };
+    } else {
+      response = await tsRestFetchApi({
+        ...args,
+        path: pathWithSuffix,
+        headers,
+      });
+    }
 
     if (response.status !== 429) {
       return response;

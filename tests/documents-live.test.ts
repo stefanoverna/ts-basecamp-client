@@ -148,8 +148,7 @@ describe('Basecamp documents (live)', () => {
       const updatedDocument = DocumentSchema.parse(documentUpdateResponse.body);
       expect(updatedDocument.title).toContain('(updated)');
 
-      // Test upload operations with attachments
-      // First, create an attachment (simulate a file upload)
+      // Create an attachment and embed it in the document to test blob download
       const testFileContent = new TextEncoder().encode('Test file content for contract suite');
       const attachmentCreateResponse = await client.attachments.create({
         query: {
@@ -223,6 +222,63 @@ describe('Basecamp documents (live)', () => {
       expect(uploadUpdateResponse.status).toBe(200);
       const updatedUpload = UploadSchema.parse(uploadUpdateResponse.body);
       expect(updatedUpload.description).toContain('Updated');
+
+      // Download the upload file content
+      const filename = updatedUpload.download_url.split('/').pop()!;
+      const downloadResponse = await client.uploads.download({
+        params: {
+          bucketId,
+          uploadId,
+          filename,
+        },
+      });
+
+      expect(downloadResponse.status).toBe(200);
+      expect(downloadResponse.body).toBeInstanceOf(ArrayBuffer);
+      expect((downloadResponse.body as ArrayBuffer).byteLength).toBeGreaterThan(0);
+
+      // Test blob download: embed the attachment in a document, read it back
+      // to get the blob UUID from the expanded <bc-attachment> tag
+      const blobAttachmentResponse = await client.attachments.create({
+        query: { name: 'blob-test.txt' },
+        body: new TextEncoder().encode('Blob download test content').buffer as ArrayBuffer,
+      });
+      expect(blobAttachmentResponse.status).toBe(201);
+      const blobSgid = AttachmentResponseSchema.parse(blobAttachmentResponse.body).attachable_sgid;
+
+      // Update the document to embed the attachment
+      await client.documents.update({
+        params: { bucketId, documentId },
+        body: {
+          content: `<div>Document with blob: <bc-attachment sgid="${blobSgid}"></bc-attachment></div>`,
+        },
+      });
+
+      // Read back the document to get the expanded bc-attachment with blob URL
+      const docWithBlobResponse = await client.documents.get({
+        params: { bucketId, documentId },
+      });
+      expect(docWithBlobResponse.status).toBe(200);
+      const docWithBlob = DocumentSchema.parse(docWithBlobResponse.body);
+
+      // Extract blob ID and filename from the href attribute
+      // href format: https://storage.3.basecamp.com/{accountId}/blobs/{blobId}/download/{filename}
+      const hrefMatch = docWithBlob.content.match(
+        /href="[^"]*\/blobs\/([^/]+)\/download\/([^"]+)"/,
+      );
+      expect(hrefMatch).not.toBeNull();
+      const [, blobId, blobFilename] = hrefMatch!;
+
+      const blobDownloadResponse = await client.blobs.download({
+        params: {
+          blobId,
+          filename: decodeURIComponent(blobFilename),
+        },
+      });
+
+      expect(blobDownloadResponse.status).toBe(200);
+      expect(blobDownloadResponse.body).toBeInstanceOf(ArrayBuffer);
+      expect((blobDownloadResponse.body as ArrayBuffer).byteLength).toBeGreaterThan(0);
     } finally {
       // Clean up: trash upload, document, and vault (in reverse order of creation)
       if (uploadId !== undefined) {

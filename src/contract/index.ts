@@ -14,6 +14,7 @@ import {
   messageTypesRouter,
   messagesRouter,
 } from './resources/communications';
+import { blobsRouter } from './resources/blobs';
 import {
   attachmentsRouter,
   documentsRouter,
@@ -79,6 +80,7 @@ export const contract = c.router(
     vaults: vaultsRouter,
     uploads: uploadsRouter,
     attachments: attachmentsRouter,
+    blobs: blobsRouter,
   },
   {
     strictStatusCodes: true,

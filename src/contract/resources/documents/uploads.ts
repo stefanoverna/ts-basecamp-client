@@ -86,6 +86,29 @@ export const uploadsRouter = c.router({
       200: UploadSchema,
     },
   },
+  download: {
+    summary: 'Download an upload',
+    description: 'Download the raw file content of an upload.',
+    metadata: {
+      tag: 'Uploads',
+      operationId: 'uploads.download',
+      docsPath: '/docs/basecamp-api-specs/sections/uploads.md',
+      rawResponse: true,
+    } as const,
+    method: 'GET',
+    path: '/buckets/:bucketId/uploads/:uploadId/download/:filename',
+    pathParams: z.object({
+      bucketId: BasecampIdParamSchema,
+      uploadId: BasecampIdParamSchema,
+      filename: z.string().min(1),
+    }),
+    responses: {
+      200: c.otherResponse({
+        contentType: 'application/octet-stream',
+        body: c.type<ArrayBuffer>(),
+      }),
+    },
+  },
   trash: {
     summary: 'Trash an upload',
     description: 'Move an upload recording to the trash. Trashed items can be restored via the UI.',
