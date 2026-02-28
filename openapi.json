@@ -39673,6 +39673,89 @@
         "x-client-method": "uploads.update"
       }
     },
+    "/buckets/{bucketId}/uploads/{uploadId}/download/{filename}": {
+      "get": {
+        "description": "Download the raw file content of an upload.",
+        "summary": "Download an upload",
+        "tags": [
+          "Uploads"
+        ],
+        "parameters": [
+          {
+            "name": "bucketId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "nullable": true
+            }
+          },
+          {
+            "name": "uploadId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "nullable": true
+            }
+          },
+          {
+            "name": "filename",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200"
+          }
+        },
+        "operationId": "uploads.download",
+        "externalDocs": {
+          "description": "Official Basecamp API Documentation",
+          "url": "https://github.com/basecamp/bc3-api/docs/basecamp-api-specs/sections/uploads.md"
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "x-client-method": "uploads.download"
+      }
+    },
     "/buckets/{bucketId}/recordings/{uploadId}/status/trashed": {
       "put": {
         "description": "Move an upload recording to the trash. Trashed items can be restored via the UI.",
@@ -39824,6 +39907,74 @@
           }
         ],
         "x-client-method": "attachments.create"
+      }
+    },
+    "/blobs/{blobId}/download/{filename}": {
+      "get": {
+        "description": "Download the raw file content of a blob. Blobs represent files embedded in documents and messages via bc-attachment tags.",
+        "summary": "Download a blob",
+        "tags": [
+          "Blobs"
+        ],
+        "parameters": [
+          {
+            "name": "blobId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "filename",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200"
+          }
+        },
+        "operationId": "blobs.download",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "x-client-method": "blobs.download"
       }
     }
   },
