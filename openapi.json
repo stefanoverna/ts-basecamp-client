@@ -22228,7 +22228,8 @@
                   },
                   "position": {
                     "type": "integer",
-                    "minimum": 0
+                    "minimum": 0,
+                    "exclusiveMinimum": 0
                   }
                 },
                 "required": [
@@ -35640,7 +35641,8 @@
                   }
                 },
                 "required": [
-                  "content"
+                  "content",
+                  "group_on"
                 ]
               }
             }
