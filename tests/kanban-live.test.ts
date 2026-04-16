@@ -151,7 +151,7 @@ describe('Basecamp card tables (live)', () => {
           },
           body: {
             column_id: destinationColumnId,
-            position: 0,
+            position: 1,
           },
         });
 
@@ -206,7 +206,7 @@ describe('Basecamp card tables (live)', () => {
         },
         body: {
           source_id: stepId,
-          position: 0,
+          position: 1,
         },
       });
 

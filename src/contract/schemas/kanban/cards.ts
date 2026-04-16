@@ -53,7 +53,7 @@ export const CardTableCardUpdateBodySchema = z
 
 export const CardTableCardMoveBodySchema = z.object({
   column_id: BasecampIdSchema,
-  position: z.number().int().nonnegative().optional(),
+  position: z.number().int().positive().optional(),
 });
 
 export type CardTableCard = z.infer<typeof CardTableCardSchema>;
