@@ -30,7 +30,7 @@ export const TodoCollectionResponseSchema = z.array(TodoSchema);
 
 export const TodoQuerySchema = z.object({
   status: z.enum(['active', 'archived', 'trashed']).or(z.string()).optional(),
-  completed: z.enum(['true']).optional(),
+  completed: z.literal(true).optional(),
   page: z.coerce.number().int().positive().optional(),
 });
 

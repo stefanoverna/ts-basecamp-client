@@ -2,6 +2,8 @@ import { beforeAll, describe, expect, it } from 'vitest';
 
 import { Client } from 'src/buildClient';
 import {
+  QuestionAnswerListResponseSchema,
+  QuestionAnswerSchema,
   QuestionListResponseSchema,
   QuestionnaireSchema,
   QuestionSchema,
@@ -182,6 +184,63 @@ describe('Basecamp scheduling (live)', () => {
 
       expect(questionGetResponse.status).toBe(200);
       QuestionSchema.parse(questionGetResponse.body);
+
+      // Test question answers
+      let answerId: number | undefined;
+
+      try {
+        // Create a question answer
+        const answerCreateResponse = await client.questionAnswers.create({
+          params: {
+            bucketId,
+            questionId: firstQuestion.id,
+          },
+          body: {
+            content: `<div>Contract test answer ${Date.now()}</div>`,
+            group_on: new Date().toISOString().split('T')[0]!,
+          },
+        });
+
+        expect(answerCreateResponse.status).toBe(201);
+        const createdAnswer = QuestionAnswerSchema.parse(answerCreateResponse.body);
+        answerId = createdAnswer.id;
+        expect(createdAnswer.content).toContain('Contract test answer');
+        expect(createdAnswer.type).toBe('Question::Answer');
+
+        // Get the created answer
+        const answerGetResponse = await client.questionAnswers.get({
+          params: {
+            bucketId,
+            answerId,
+          },
+        });
+
+        expect(answerGetResponse.status).toBe(200);
+        QuestionAnswerSchema.parse(answerGetResponse.body);
+
+        // List answers for the question
+        const answersListResponse = await client.questionAnswers.list({
+          params: {
+            bucketId,
+            questionId: firstQuestion.id,
+          },
+        });
+
+        expect(answersListResponse.status).toBe(200);
+        const answers = QuestionAnswerListResponseSchema.parse(answersListResponse.body);
+        expect(answers.some((a) => a.id === answerId)).toBe(true);
+      } finally {
+        // Clean up: trash the answer
+        if (answerId !== undefined) {
+          const trashResponse = await client.recordings.trash({
+            params: {
+              bucketId,
+              recordingId: answerId,
+            },
+          });
+          expect(trashResponse.status).toBe(204);
+        }
+      }
     }
   });
 });

@@ -33,6 +33,7 @@ import {
   cardTablesRouter,
 } from './resources/kanban';
 import {
+  questionAnswersRouter,
   questionnairesRouter,
   questionsRouter,
   scheduleEntriesRouter,
@@ -76,6 +77,7 @@ export const contract = c.router(
     scheduleEntries: scheduleEntriesRouter,
     questionnaires: questionnairesRouter,
     questions: questionsRouter,
+    questionAnswers: questionAnswersRouter,
     documents: documentsRouter,
     vaults: vaultsRouter,
     uploads: uploadsRouter,

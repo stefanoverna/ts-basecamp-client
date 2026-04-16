@@ -9,3 +9,6 @@ export type { QuestionnairesRouter } from './questionnaires';
 
 export { questionsRouter } from './questions';
 export type { QuestionsRouter } from './questions';
+
+export { questionAnswersRouter } from './question-answers';
+export type { QuestionAnswersRouter } from './question-answers';

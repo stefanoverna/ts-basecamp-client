@@ -35228,6 +35228,1028 @@
         "x-client-method": "questions.get"
       }
     },
+    "/buckets/{bucketId}/questions/{questionId}/answers": {
+      "get": {
+        "description": "Returns a paginated list of answers for a specific check-in question.",
+        "summary": "List question answers",
+        "tags": [
+          "Question Answers"
+        ],
+        "parameters": [
+          {
+            "name": "bucketId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "nullable": true
+            }
+          },
+          {
+            "name": "questionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "nullable": true
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "exclusiveMinimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "status": {
+                        "oneOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "active",
+                              "trashed"
+                            ]
+                          },
+                          {
+                            "type": "string"
+                          }
+                        ]
+                      },
+                      "visible_to_clients": {
+                        "type": "boolean"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "inherits_status": {
+                        "type": "boolean"
+                      },
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "Question::Answer"
+                        ]
+                      },
+                      "url": {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "app_url": {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "bookmark_url": {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "subscription_url": {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "comments_count": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "comments_url": {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "position": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "parent": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "url": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "app_url": {
+                            "type": "string",
+                            "format": "uri"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "title",
+                          "type",
+                          "url",
+                          "app_url"
+                        ]
+                      },
+                      "bucket": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "type"
+                        ]
+                      },
+                      "creator": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "attachable_sgid": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "email_address": {
+                            "type": "string",
+                            "format": "email",
+                            "nullable": true
+                          },
+                          "personable_type": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "bio": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "location": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "admin": {
+                            "type": "boolean"
+                          },
+                          "owner": {
+                            "type": "boolean"
+                          },
+                          "client": {
+                            "type": "boolean"
+                          },
+                          "employee": {
+                            "type": "boolean"
+                          },
+                          "time_zone": {
+                            "type": "string"
+                          },
+                          "avatar_url": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "company": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "name": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name"
+                            ]
+                          },
+                          "can_manage_projects": {
+                            "type": "boolean"
+                          },
+                          "can_manage_people": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "attachable_sgid",
+                          "name",
+                          "email_address",
+                          "personable_type",
+                          "title",
+                          "bio",
+                          "location",
+                          "created_at",
+                          "updated_at",
+                          "admin",
+                          "owner",
+                          "client",
+                          "employee",
+                          "time_zone",
+                          "avatar_url",
+                          "can_manage_projects",
+                          "can_manage_people"
+                        ]
+                      },
+                      "content": {
+                        "type": "string",
+                        "minLength": 0
+                      },
+                      "group_on": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "status",
+                      "visible_to_clients",
+                      "created_at",
+                      "updated_at",
+                      "title",
+                      "inherits_status",
+                      "type",
+                      "url",
+                      "app_url",
+                      "bucket",
+                      "creator",
+                      "content",
+                      "group_on"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "questionAnswers.list",
+        "externalDocs": {
+          "description": "Official Basecamp API Documentation",
+          "url": "https://github.com/basecamp/bc3-api/docs/basecamp-api-specs/sections/question_answers.md#get-question-answers"
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "x-client-method": "questionAnswers.list"
+      },
+      "post": {
+        "description": "Create a new answer for a check-in question.",
+        "summary": "Create a question answer",
+        "tags": [
+          "Question Answers"
+        ],
+        "parameters": [
+          {
+            "name": "bucketId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "nullable": true
+            }
+          },
+          {
+            "name": "questionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "nullable": true
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "group_on": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "content"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "status": {
+                      "oneOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "active",
+                            "trashed"
+                          ]
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "visible_to_clients": {
+                      "type": "boolean"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "inherits_status": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Question::Answer"
+                      ]
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "app_url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "bookmark_url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "subscription_url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "comments_count": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "comments_url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "position": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "parent": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "app_url": {
+                          "type": "string",
+                          "format": "uri"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "title",
+                        "type",
+                        "url",
+                        "app_url"
+                      ]
+                    },
+                    "bucket": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "type"
+                      ]
+                    },
+                    "creator": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "attachable_sgid": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email_address": {
+                          "type": "string",
+                          "format": "email",
+                          "nullable": true
+                        },
+                        "personable_type": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "bio": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "location": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "admin": {
+                          "type": "boolean"
+                        },
+                        "owner": {
+                          "type": "boolean"
+                        },
+                        "client": {
+                          "type": "boolean"
+                        },
+                        "employee": {
+                          "type": "boolean"
+                        },
+                        "time_zone": {
+                          "type": "string"
+                        },
+                        "avatar_url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "company": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name"
+                          ]
+                        },
+                        "can_manage_projects": {
+                          "type": "boolean"
+                        },
+                        "can_manage_people": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "attachable_sgid",
+                        "name",
+                        "email_address",
+                        "personable_type",
+                        "title",
+                        "bio",
+                        "location",
+                        "created_at",
+                        "updated_at",
+                        "admin",
+                        "owner",
+                        "client",
+                        "employee",
+                        "time_zone",
+                        "avatar_url",
+                        "can_manage_projects",
+                        "can_manage_people"
+                      ]
+                    },
+                    "content": {
+                      "type": "string",
+                      "minLength": 0
+                    },
+                    "group_on": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "status",
+                    "visible_to_clients",
+                    "created_at",
+                    "updated_at",
+                    "title",
+                    "inherits_status",
+                    "type",
+                    "url",
+                    "app_url",
+                    "bucket",
+                    "creator",
+                    "content",
+                    "group_on"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "questionAnswers.create",
+        "externalDocs": {
+          "description": "Official Basecamp API Documentation",
+          "url": "https://github.com/basecamp/bc3-api/docs/basecamp-api-specs/sections/question_answers.md#get-question-answers"
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "x-client-method": "questionAnswers.create"
+      }
+    },
+    "/buckets/{bucketId}/question_answers/{answerId}": {
+      "get": {
+        "description": "Returns a single question answer by its ID.",
+        "summary": "Get a question answer",
+        "tags": [
+          "Question Answers"
+        ],
+        "parameters": [
+          {
+            "name": "bucketId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "nullable": true
+            }
+          },
+          {
+            "name": "answerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "nullable": true
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "status": {
+                      "oneOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "active",
+                            "trashed"
+                          ]
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "visible_to_clients": {
+                      "type": "boolean"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "inherits_status": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Question::Answer"
+                      ]
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "app_url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "bookmark_url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "subscription_url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "comments_count": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "comments_url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "position": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "parent": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "app_url": {
+                          "type": "string",
+                          "format": "uri"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "title",
+                        "type",
+                        "url",
+                        "app_url"
+                      ]
+                    },
+                    "bucket": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "type"
+                      ]
+                    },
+                    "creator": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "attachable_sgid": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email_address": {
+                          "type": "string",
+                          "format": "email",
+                          "nullable": true
+                        },
+                        "personable_type": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "bio": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "location": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "admin": {
+                          "type": "boolean"
+                        },
+                        "owner": {
+                          "type": "boolean"
+                        },
+                        "client": {
+                          "type": "boolean"
+                        },
+                        "employee": {
+                          "type": "boolean"
+                        },
+                        "time_zone": {
+                          "type": "string"
+                        },
+                        "avatar_url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "company": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name"
+                          ]
+                        },
+                        "can_manage_projects": {
+                          "type": "boolean"
+                        },
+                        "can_manage_people": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "attachable_sgid",
+                        "name",
+                        "email_address",
+                        "personable_type",
+                        "title",
+                        "bio",
+                        "location",
+                        "created_at",
+                        "updated_at",
+                        "admin",
+                        "owner",
+                        "client",
+                        "employee",
+                        "time_zone",
+                        "avatar_url",
+                        "can_manage_projects",
+                        "can_manage_people"
+                      ]
+                    },
+                    "content": {
+                      "type": "string",
+                      "minLength": 0
+                    },
+                    "group_on": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "status",
+                    "visible_to_clients",
+                    "created_at",
+                    "updated_at",
+                    "title",
+                    "inherits_status",
+                    "type",
+                    "url",
+                    "app_url",
+                    "bucket",
+                    "creator",
+                    "content",
+                    "group_on"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "questionAnswers.get",
+        "externalDocs": {
+          "description": "Official Basecamp API Documentation",
+          "url": "https://github.com/basecamp/bc3-api/docs/basecamp-api-specs/sections/question_answers.md#get-a-question-answer"
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "x-client-method": "questionAnswers.get"
+      }
+    },
     "/buckets/{bucketId}/vaults/{vaultId}/documents": {
       "get": {
         "description": "Returns a paginated list of active documents in a vault. Pagination data is available via the Link and X-Total-Count headers.",

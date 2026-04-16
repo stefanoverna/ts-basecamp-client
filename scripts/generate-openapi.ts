@@ -1,17 +1,7 @@
 import { writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { generateOpenApi } from '@ts-rest/open-api';
-import { generateSchema } from '@anatine/zod-openapi';
-import { z } from 'zod';
 import { contract } from '../src/contract/index';
-import type { SchemaTransformerSync } from '@ts-rest/open-api';
-
-const ZOD_3_SYNC: SchemaTransformerSync = ({ schema }) => {
-  if (schema instanceof z.ZodType) {
-    return generateSchema(schema);
-  }
-  return null;
-};
 
 const openApiDocument = generateOpenApi(
   contract,
@@ -44,8 +34,7 @@ const openApiDocument = generateOpenApi(
     },
   },
   {
-    schemaTransformer: ZOD_3_SYNC,
-    operationMapper: (operation, appRoute, operationId) => {
+    operationMapper: (operation, appRoute) => {
       const metadata = appRoute.metadata as
         | {
             tag?: string;
